@@ -1,12 +1,28 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { useState } from 'react'
 import { GiAbstract051 } from 'react-icons/gi'
+import RegisterForm from './_components/register-form'
+import LoginForm from './_components/login-form'
+import { useSearchParams } from 'next/navigation'
 
 const HomePage = () => {
+  const [openSheet, setOpenSheet] = useState(false)
+  const queryStrings = useSearchParams()
+  const form = queryStrings.get('form')
+
   return (  
     <div className='flex flex-col'>
       <div className='px-10 py-5 flex justify-between items-center bg-primary'>
         <h1 className='logo-text text-3xl text-white'>Sagna</h1>
-        <Button variant='light'>Login</Button>
+        <Button
+          onClick={() => setOpenSheet(true)}
+          variant='light'
+        >
+          Login
+        </Button>
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-10 h-[80vh] items-center px-10'>
@@ -25,6 +41,24 @@ const HomePage = () => {
           </Button>
         </div>
       </div>
+      <Sheet
+        open={openSheet}
+        onOpenChange={(open) => setOpenSheet(open)}
+      >
+        <SheetContent className='min-w-125'>
+          <SheetHeader>
+            <SheetTitle></SheetTitle>
+            <SheetDescription></SheetDescription>
+            <div className='flex flex-col items-center justify-center h-screen'>
+              {form === 'register'
+                ? <RegisterForm />
+                : <LoginForm />
+              }
+            </div>
+          </SheetHeader>
+
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
